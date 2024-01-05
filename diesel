@@ -1,0 +1,40 @@
+#! /bin/bash
+
+# Steam Registry Location
+REGISTRY="$HOME"/.steam/registry.vdf
+
+if [[ ! -f "$REGISTRY" ]]; then
+	echo "Couldn't find ${REGISTRY}"
+	exit 1
+fi
+
+if [[ $# -eq 0 ]]; then
+	echo "No username supplied. Please try again."
+	exit 1
+elif [[ ${#1} -lt 4 ]]; then
+	echo "Username is too short. Please try again."
+	exit 1
+else
+	username=$1
+fi
+
+if [[ $(pgrep steam | wc -l) -gt 0 ]]; then
+	current_user=$(grep -e .AutoLoginUser $REGISTRY | awk -F '"' '{print $4}')
+
+	if [[ $current_user = $username ]]; then
+		echo "Steam is already running for ${username}, enjoy."
+		exit 0
+	fi
+
+	echo "Steam is already running, killing it now..."
+	pkill steam
+
+	while [[ $(pgrep steam | wc -l) -gt 0 ]]; do
+		sleep 1s
+	done
+fi
+
+sed -i "s/\"AutoLoginUser\"\t\t[^ ]*/\"AutoLoginUser\"\t\t\"${username}\"/" $REGISTRY
+
+echo "Starting Steam as ${username}..."
+steam-runtime %U

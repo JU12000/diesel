@@ -1,0 +1,4 @@
+# Ignore makepkg and makechrootpkg files
+/diesel-git
+*.log
+*.pkg.tar.zst

@@ -1,24 +1,17 @@
 # DO NOT UPLOAD THIS PACKAGE TO THE AUR!
 
 # Maintainer: JU12000
-pkgname=diesel-git
+pkgname=diesel
 pkgver=1.0.0
 pkgrel=1
 pkgdesc="A command line utility for Steam account switching"
 arch=('any')
-url="ssh://git@github.com/JU12000/diesel"
 license=('GPL3')
 depends=('procps-ng' 'steam')
 makedepends=('git')
-source=("$pkgname::git+$url")
-sha256sums=('SKIP')
-
-pkgver() {
-	cd "$pkgname"
-	git describe --long --tags | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
-}
+source=("diesel")
+sha256sums=('4b54e213fb01f7f0f7cf0717900934389999b40032d8421cf0e9cbc4cce29adc')
 
 package() {
-	cd "$pkgname"
-	install -Dm755 diesel -t "${pkgdir}/usr/bin"
+	install -Dm755 "${srcdir}/diesel" -t "${pkgdir}/usr/bin"
 }

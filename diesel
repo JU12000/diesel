@@ -21,11 +21,6 @@ fi
 if [[ $(pgrep steam | wc -l) -gt 0 ]]; then
 	current_user=$(grep -e .AutoLoginUser $REGISTRY | awk -F '"' '{print $4}')
 
-	if [[ $current_user = $username ]]; then
-		echo "Steam is already running for ${username}, enjoy."
-		exit 0
-	fi
-
 	echo "Steam is already running, killing it now..."
 	pkill steam
 
@@ -37,4 +32,4 @@ fi
 sed -i "s/\"AutoLoginUser\"\t\t[^ ]*/\"AutoLoginUser\"\t\t\"${username}\"/" $REGISTRY
 
 echo "Starting Steam as ${username}..."
-steam-runtime %U
+steam-runtime -dev -console %U
